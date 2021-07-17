@@ -1,11 +1,12 @@
 - Configuração
 
-[] Arquitetura MVC + arquivos
-[] Arquivos de configuração (npm init, dependências)
+[x] Arquitetura MVC + arquivos
+[x] Arquivos de configuração (npm init, dependências)
+[]Arquivo .gitignore
 
 - Entendendo demandas de negócio
 
-[] Preencher no readme as demandas de negócio + as rotas para cada coisa solicitada
+[x] Preencher no readme as demandas de negócio + as rotas para cada coisa solicitada
 
 - Povoando os arquivos
 
@@ -37,3 +38,24 @@
     [] Criar const para put + rota
     [] Criar const para patch + rota
 
+
+{GET}/posts
+const getAll que retorna todos os posts
+
+{GET}/posts/:id
+const getById para ver um post especifico
+
+{DELETE}/posts/:id
+const deletePost para deletar um post
+
+{POST}/posts/create
+const createPost para criar um post
+
+{PUT}/posts/:id
+const replacePost para atualizar post
+
+{PATCH}/posts/updateTittle/:id
+const updateTittle para atualizar o titulo do post
+
+{PATCH}/posts/update/:id
+const updateAnything para atualizar qualquer parte do post separadamente

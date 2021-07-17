@@ -1,6 +1,6 @@
-const movies = require("../models/filmes.json") // importando meu arquivo json dos filmes (que nesse projeto, são os meus dados)
+const movies = require("../models/filmes.json")             
 
-// definir uma rota padrão
+
 const home = (request, response) => {
     response.status(200).send(
         {
@@ -14,24 +14,21 @@ const getAll = (request, response) => {
 };
 
 const getById = (request, response) => {
-    // id solicitado na requição (request)
+    
     const requestedId = request.params.id;
 
-    // find((elemento) => elemento + a lógica)
+
     const filteredId = movies.find(movie => movie.id == requestedId);
 
-    //enviar reposta
+
     response.status(200).send(filteredId);
 }
 
 const getByTitle = (request, response) => {
-    // acessando o título solicitado na request
     const requestedTitle = request.query.title.toLowerCase()
 
-    // filtrar os títulos do json
+    
     const filteredTitle = movies.find(movie => movie.title.toLowerCase().includes(requestedTitle))
-
-    // adicionar um condição para retornar o título
     if (requestedTitle === "" || filteredTitle === undefined) {
         response.status(404).send({
             "message": "Por favor, insira um título válido."
@@ -39,18 +36,13 @@ const getByTitle = (request, response) => {
     } else {
         response.status(200).send(filteredTitle)
     }
-};
 
-// pesquisa por gênero
 const getByGenre = (request, response) => {
-    // acessar qual o gênero requisitado
     const requestedGenre = request.query.genre;
-    // criar lista para armazenar dados do loop
     let movieList = [];
 
-    // comparar todos os itens da lista que são daquele gênero
     movies.forEach(movie => {
-        // separar elementos
+        
         let genreList = movie.genre.split(",")
 
         for (genre of genreList) {
@@ -61,15 +53,157 @@ const getByGenre = (request, response) => {
         }
 
     })
-
-    // retornar a resposta
     response.status(200).send(movieList)
 }
+const apagarmovie = (request, response) => {
 
-module.exports = {
-    home,
-    getAll,
-    getById,
-    getByTitle,
-    getByGenre
+
+    const idRequerido = request.params.id;
+    const filmesFiltrado = movies.find(filme => filme.id == idRequerido);
+
+    const indice = movies.indexOf(filmesFiltrado);
+
+    movies.splice(indice, 1);
+
+    response.status(200).send(
+
+        {
+            "mensagem": "tarefa deletada com sucesso",
+
+
+            movies
+        }
+
+
+    )
+},
+
+const createMovies = (req, res) => {
+
+
+    let requestedTitle = req.body.title;
+    let requestedYear = req.body.year;
+    let requestedRated = req.body.rated;
+    let requestedReleased = req.body.released;
+    let requestedRuntime = req.body.runtime;
+    let requestedGenre = requ.body.genre;
+    let requestedDirector = req.body.director;
+    let requestedWriter = req.body.writer;
+    let requestedActors = req.body.actors;
+    let requestedPlot = req.body.plot;
+    let requestedLanguage = req.body.language;
+    let requestedCountry = req.body.country;
+    let requestedAwards = req.body.awards
+
+
+    }
+     
+        let newMovies = {
+
+            "id":  Math.random().toString(32).substr(2, 6) ,
+            "title": requestedTitle,
+            "year": requestedYear,
+            "rated": requestedRated,
+            "released": requestedReleased,
+            "runtime": requestedRuntime,
+            "genre": requestedGenre,
+            "director": requestedDirector,
+            "writer": requestedWriter,
+            "actors": requestedActors,
+            "plot": requestedPlot,
+            "language": requestedLanguage,
+            "country": requesteCountry,
+            "awards": requestedAwards
+        }
+
+    movies.push(newMovies);
+
+
+    res.status(201).send({
+        "mensagem": "Post criado com sucesso",
+        newMovies
+    });
+
+
+
+    const replaceMovies = (req, res) => {
+
+        let requestedId = req.params.id;
+        let movieFromBody = req.body;
+
+        let filteredPost = movies.find(filme => filme.id == requestedId);
+
+        let updateMovie = {
+            "id": filteredPost.id,
+            "title": movieFromBody.title,
+            "year": filteredPost.year,
+            "rated": movieFromBody.rated,
+            "released": movieFromBody.released,
+            "runtime": movieFromBody.runtime,
+            "genre": movieFromBody.genero,
+            "director": movieFromBody.director,
+            "writer": movieFromBody.writer,
+            "actors": movieFromBody.actors,
+            "plot": movieFromBody.plot,
+            "language": movieFromBody.linguagem,
+            "country": movieFromBody.country,
+            "awards": movieFromBody.awards,
+        }
+
+        const indice = movies.indexOf(filteredPost);
+        movies.splice(indice, 1, updateMovie);
+        res.status(200).send({
+            "mensagem": "Post substituído com sucesso",
+            updateMovie
+        });
+    };
+
+    const updateTitle = (req, res) => {
+
+        let requestedId = req.params.id;
+        let newTitle = req.body.titulo;
+
+
+        let filteredPost = movies.find(post => post.id == requestedId)
+        filteredPost.titulo = newTitle;
+
+        res.status(200).send({
+            "mensagem": "Título atualizado com sucesso",
+            filteredPost
+        });
+    };
+
+    const updateAnything = (req, res) => {
+        let requestedId = req.params.id;
+
+        let filteredPost = movies.find(filme => filme.id == requestedId);
+        let updatedPost = req.body;
+
+        let keyList = Object.keys(updatedPost);
+
+        keyList.forEach((key) => {
+
+            filteredPost[key] = updatedPost[key]
+        });
+
+        res.status(201).send({
+            "message": "Post atualizado com sucesso",
+            filteredPost
+        });
+
+    };
+
+
+    module.exports = {
+        home,
+        getAll,
+        getById,
+        getByTitle,
+        getByGenre,
+        apagarmovie,
+        createMovies,
+        replaceMovies,
+        updateTitle,
+        updateAnything,
+    }
 }
